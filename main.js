@@ -118,8 +118,7 @@ function checkDraw() {
         alert("O wins!");
     }
     updateScore();
-    //setTimeout(() => restartGame(), 1500);
-    restartGame();
+    setTimeout(() => restartGame(), 1500);
   }
 
 function SwitchBtn() {
@@ -139,9 +138,9 @@ function restartGame() {
   
     const cells = document.querySelectorAll('div');
   cells.forEach(cell => {
-    if (cell !== game) { 
-      cell.textContent = '';
-    }
+    if (cell !== game && cell !== scoreDisplay) { 
+        cell.textContent = '';
+      }
   });
   
  
