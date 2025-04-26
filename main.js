@@ -104,21 +104,21 @@ function checkDraw() {
       }
     }
     if (filledCells === 9) {
-      alert("Draw");
-      setTimeout(() => restartGame(), 1500);
+        setTimeout(() => alert("Draw"), 100);
+      setTimeout(() => restartGame(), 1000);
     }
   }
 
   function declareWinner(winner) {
     if (winner === 1) {
         xWins++;
-        alert("X wins!");
+        setTimeout(() => alert("X wins!"), 100);
     } else {
         oWins++;
-        alert("O wins!");
+        setTimeout(() => alert("O wins!"), 100);
     }
     updateScore();
-    setTimeout(() => restartGame(), 1500);
+    setTimeout(() => restartGame(), 1000);
   }
 
 function SwitchBtn() {
