@@ -1,0 +1,73 @@
+const game = document.createElement('div');
+game.style.display = 'grid';
+game.style.gridTemplateColumns = 'repeat(3, 100px)';
+game.style.gap = '5px';
+document.body.appendChild(game);
+
+let FirstPlayer = true;
+let board = [
+  [-1, -1, -1],
+  [-1, -1, -1],
+  [-1, -1, -1]
+];
+
+for (let i = 0; i < 9; i++) {
+  const cell = document.createElement('div');
+  cell.style.width = '100px';
+  cell.style.height = '100px';
+  cell.style.background = '#eee';
+  cell.style.display = 'flex';
+  cell.style.alignItems = 'center';
+  cell.style.justifyContent = 'center';
+  cell.style.fontSize = '40px';
+  cell.style.cursor = 'pointer';
+
+  const row = Math.floor(i / 3);
+  const col = i % 3;
+
+  cell.dataset.row = row;
+  cell.dataset.col = col;
+
+  cell.addEventListener('click', handleClick);
+
+  game.appendChild(cell);
+}
+
+function handleClick(event) {
+  const clickedCell = event.target;
+  const row = Number(clickedCell.dataset.row);
+  const col = Number(clickedCell.dataset.col);
+
+  console.log('Clicked row:', row, 'col:', col);
+
+
+  if (board[row][col] === -1) { // only if empty
+    if (FirstPlayer == false) {
+        board[row][col] = 0;
+        clickedCell.textContent = 'O';
+        FirstPlayer = true;
+    } else {
+        board[row][col] = 1;
+        FirstPlayer = false;
+        clickedCell.textContent = 'X';
+    }
+    
+  }
+  for (let row = 0; row < 3; row++) {
+    if (board[row][0] === board[row][1] &&
+        board[row][1] === board[row][2] &&
+        board[row][0] !== -1) {
+      console.log("You win");
+    }
+  }
+
+  for (let col = 0; col < 3; col++) {
+    if (board[0][col] === board[1][col] && board[1][col] === board[2][col] && board[0][col] !== -1) {
+      console.log("You win");
+    }
+  }
+
+}
+
+
+  
