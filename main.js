@@ -54,17 +54,33 @@ function handleClick(event) {
     
   }
   for (let row = 0; row < 3; row++) {
-    if (board[row][0] === board[row][1] &&
-        board[row][1] === board[row][2] &&
-        board[row][0] !== -1) {
-      console.log("You win");
+    if (board[row][0] === board[row][1] && board[row][1] === board[row][2] && board[row][0] !== -1) {
+            if (FirstPlayer == true) {
+                console.log("O win");
+            } else {
+                console.log("X win");
+            }
     }
   }
 
   for (let col = 0; col < 3; col++) {
     if (board[0][col] === board[1][col] && board[1][col] === board[2][col] && board[0][col] !== -1) {
-      console.log("You win");
+        if (FirstPlayer == true) {
+            console.log("O win");
+        } else {
+            console.log("X win");
+        }
     }
+  }
+
+  if ((board[0][0] === board[1][1] && board[1][1] === board[2][2] && board[1][1] !== -1) ||
+   (board[0][2] === board[1][1] && board[1][1] === board[2][0] && board[1][1] !== -1)) {
+    if (FirstPlayer == true) {
+        console.log("O win");
+    } else {
+        console.log("X win");
+    }
+    
   }
 
 }
