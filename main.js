@@ -85,5 +85,8 @@ function handleClick(event) {
 
 }
 
+function SwitchBtn() {
+    FirstPlayer = false;
+}
 
   
