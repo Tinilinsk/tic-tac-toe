@@ -41,7 +41,7 @@ function handleClick(event) {
   console.log('Clicked row:', row, 'col:', col);
 
 
-  if (board[row][col] === -1) { // only if empty
+  if (board[row][col] === -1) {
     if (FirstPlayer == false) {
         board[row][col] = 0;
         clickedCell.textContent = 'O';
@@ -83,6 +83,19 @@ function handleClick(event) {
     
   }
 
+  let i = 0;
+
+  for (let r = 0; r < 3; r++) {
+    for (let c = 0; c < 3; c++) {
+      if (board[r][c] !== -1) {
+        i++;
+      }
+    }
+  }
+  
+  if (i === 9) {
+    console.log("Draw");
+  }
 }
 
 function SwitchBtn() {
