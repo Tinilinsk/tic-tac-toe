@@ -64,10 +64,10 @@ function checkWinners() {
         if (board[row][0] === board[row][1] && board[row][1] === board[row][2] && board[row][0] !== -1) {
                 if (FirstPlayer) {
                     console.log("O win");
-                    restartGame();
+                    setTimeout(() => restartGame(), 2000);
                 } else {
                     console.log("X win");
-                    restartGame();
+                    setTimeout(() => restartGame(), 2000);
                 }
         }
       }
@@ -76,10 +76,10 @@ function checkWinners() {
         if (board[0][col] === board[1][col] && board[1][col] === board[2][col] && board[0][col] !== -1) {
             if (FirstPlayer) {
                 console.log("O win");
-                restartGame();
+                setTimeout(() => restartGame(), 2000);
             } else {
                 console.log("X win");
-                restartGame();
+                setTimeout(() => restartGame(), 2000);
             }
         }
       }
@@ -88,10 +88,10 @@ function checkWinners() {
        (board[0][2] === board[1][1] && board[1][1] === board[2][0] && board[1][1] !== -1)) {
         if (FirstPlayer) {
             console.log("O win");
-            restartGame();
+            setTimeout(() => restartGame(), 2000);
         } else {
             console.log("X win");
-            restartGame();
+            setTimeout(() => restartGame(), 2000);
         }
         
       }
@@ -108,7 +108,7 @@ function checkDraw() {
     }
     if (filledCells === 9) {
       console.log("Draw");
-      restartGame();
+      setTimeout(() => restartGame(), 2000);
     }
   }
 
