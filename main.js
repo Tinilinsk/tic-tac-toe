@@ -64,7 +64,9 @@ function handleClick(event) {
     FirstPlayer = !FirstPlayer;
     
   }
-  checkWinners();
+  if (checkWinners()) {
+    return;
+  }
 
   checkDraw();
 }
@@ -89,6 +91,7 @@ function checkWinners() {
             declareWinner(board[1][1]);
             return;
       }
+      return false;
 }
 
 function checkDraw() {
