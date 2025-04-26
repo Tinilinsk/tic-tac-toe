@@ -62,38 +62,22 @@ function handleClick(event) {
 function checkWinners() {
     for (let row = 0; row < 3; row++) {
         if (board[row][0] === board[row][1] && board[row][1] === board[row][2] && board[row][0] !== -1) {
-                if (FirstPlayer) {
-                    console.log("O win");
-                    setTimeout(() => restartGame(), 2000);
-                } else {
-                    console.log("X win");
-                    setTimeout(() => restartGame(), 2000);
-                }
+            declareWinner(board[row][1]);
+            return;
         }
       }
     
       for (let col = 0; col < 3; col++) {
         if (board[0][col] === board[1][col] && board[1][col] === board[2][col] && board[0][col] !== -1) {
-            if (FirstPlayer) {
-                console.log("O win");
-                setTimeout(() => restartGame(), 2000);
-            } else {
-                console.log("X win");
-                setTimeout(() => restartGame(), 2000);
-            }
+            declareWinner(board[1][col]);
+            return;
         }
       }
     
       if ((board[0][0] === board[1][1] && board[1][1] === board[2][2] && board[1][1] !== -1) ||
        (board[0][2] === board[1][1] && board[1][1] === board[2][0] && board[1][1] !== -1)) {
-        if (FirstPlayer) {
-            console.log("O win");
-            setTimeout(() => restartGame(), 2000);
-        } else {
-            console.log("X win");
-            setTimeout(() => restartGame(), 2000);
-        }
-        
+            declareWinner(board[1][1]);
+            return;
       }
 }
 
@@ -107,11 +91,19 @@ function checkDraw() {
       }
     }
     if (filledCells === 9) {
-      console.log("Draw");
-      setTimeout(() => restartGame(), 2000);
+      alert("Draw");
+      setTimeout(() => restartGame(), 1500);
     }
   }
 
+  function declareWinner(winner) {
+    if (winner === 1) {
+      alert("X wins!");
+    } else {
+      alert("O wins!");
+    }
+    setTimeout(() => restartGame(), 1500);
+  }
 
 function SwitchBtn() {
     FirstPlayer = !FirstPlayer;
