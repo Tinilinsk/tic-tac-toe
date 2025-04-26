@@ -4,12 +4,22 @@ game.style.gridTemplateColumns = 'repeat(3, 100px)';
 game.style.gap = '5px';
 document.body.appendChild(game);
 
+let xWins = 0;
+let oWins = 0;
+
+const scoreDisplay = document.createElement('div');
+scoreDisplay.style.marginBottom = '10px';
+scoreDisplay.style.fontSize = '20px';
+scoreDisplay.textContent = `X: ${xWins} - O: ${oWins}`;
+document.body.insertBefore(scoreDisplay, game);
+
 let FirstPlayer = true;
 let board = [
   [-1, -1, -1],
   [-1, -1, -1],
   [-1, -1, -1]
 ];
+
 
 for (let i = 0; i < 9; i++) {
   const cell = document.createElement('div');
@@ -98,16 +108,24 @@ function checkDraw() {
 
   function declareWinner(winner) {
     if (winner === 1) {
-      alert("X wins!");
+        xWins++;
+        alert("X wins!");
     } else {
-      alert("O wins!");
+        oWins++;
+        alert("O wins!");
     }
-    setTimeout(() => restartGame(), 1500);
+    updateScore();
+    //setTimeout(() => restartGame(), 1500);
+    restartGame();
   }
 
 function SwitchBtn() {
     FirstPlayer = !FirstPlayer;
 }
+
+function updateScore() {
+    scoreDisplay.textContent = `X: ${xWins} - O: ${oWins}`;
+  }
 
 function restartGame() {
     board = [
