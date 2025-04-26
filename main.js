@@ -114,7 +114,7 @@ function checkDraw() {
 
 
 function SwitchBtn() {
-    FirstPlayer = false;
+    FirstPlayer = !FirstPlayer;
 }
 
 function restartGame() {
