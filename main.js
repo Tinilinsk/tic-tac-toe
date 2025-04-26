@@ -42,64 +42,96 @@ function handleClick(event) {
 
 
   if (board[row][col] === -1) {
-    if (FirstPlayer == false) {
-        board[row][col] = 0;
-        clickedCell.textContent = 'O';
+    if (FirstPlayer) {
+        board[row][col] = 1;
+        clickedCell.textContent = 'X';
         FirstPlayer = true;
     } else {
-        board[row][col] = 1;
+        board[row][col] = 0;
         FirstPlayer = false;
-        clickedCell.textContent = 'X';
+        clickedCell.textContent = 'O';
     }
+    FirstPlayer = !FirstPlayer;
     
   }
-  for (let row = 0; row < 3; row++) {
-    if (board[row][0] === board[row][1] && board[row][1] === board[row][2] && board[row][0] !== -1) {
-            if (FirstPlayer == true) {
+  checkWinners();
+
+  checkDraw();
+}
+
+function checkWinners() {
+    for (let row = 0; row < 3; row++) {
+        if (board[row][0] === board[row][1] && board[row][1] === board[row][2] && board[row][0] !== -1) {
+                if (FirstPlayer) {
+                    console.log("O win");
+                    restartGame();
+                } else {
+                    console.log("X win");
+                    restartGame();
+                }
+        }
+      }
+    
+      for (let col = 0; col < 3; col++) {
+        if (board[0][col] === board[1][col] && board[1][col] === board[2][col] && board[0][col] !== -1) {
+            if (FirstPlayer) {
                 console.log("O win");
+                restartGame();
             } else {
                 console.log("X win");
+                restartGame();
             }
-    }
-  }
-
-  for (let col = 0; col < 3; col++) {
-    if (board[0][col] === board[1][col] && board[1][col] === board[2][col] && board[0][col] !== -1) {
-        if (FirstPlayer == true) {
+        }
+      }
+    
+      if ((board[0][0] === board[1][1] && board[1][1] === board[2][2] && board[1][1] !== -1) ||
+       (board[0][2] === board[1][1] && board[1][1] === board[2][0] && board[1][1] !== -1)) {
+        if (FirstPlayer) {
             console.log("O win");
+            restartGame();
         } else {
             console.log("X win");
+            restartGame();
         }
-    }
-  }
+        
+      }
+}
 
-  if ((board[0][0] === board[1][1] && board[1][1] === board[2][2] && board[1][1] !== -1) ||
-   (board[0][2] === board[1][1] && board[1][1] === board[2][0] && board[1][1] !== -1)) {
-    if (FirstPlayer == true) {
-        console.log("O win");
-    } else {
-        console.log("X win");
-    }
-    
-  }
-
-  let i = 0;
-
-  for (let r = 0; r < 3; r++) {
-    for (let c = 0; c < 3; c++) {
-      if (board[r][c] !== -1) {
-        i++;
+function checkDraw() {
+    let filledCells = 0;
+    for (let row = 0; row < 3; row++) {
+      for (let col = 0; col < 3; col++) {
+        if (board[row][col] !== -1) {
+          filledCells++;
+        }
       }
     }
+    if (filledCells === 9) {
+      console.log("Draw");
+      restartGame();
+    }
   }
-  
-  if (i === 9) {
-    console.log("Draw");
-  }
-}
+
 
 function SwitchBtn() {
     FirstPlayer = false;
 }
 
+function restartGame() {
+    board = [
+      [-1, -1, -1],
+      [-1, -1, -1],
+      [-1, -1, -1]
+    ];
+  
+    const cells = document.querySelectorAll('div');
+  cells.forEach(cell => {
+    if (cell !== game) { 
+      cell.textContent = '';
+    }
+  });
+  
+ 
+    FirstPlayer = true;
+  }
   
