@@ -1,13 +1,81 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Tic Tac Toe</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Крестики-нолики</title>
+    <style>
+      body {
+          margin: 0;
+          padding: 0;
+          height: 100vh;
+          background-color: #f9f9f9;
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+          align-items: center;
+          font-family: Arial, sans-serif;
+      }
+  
+      h1 {
+          font-weight: normal;
+          margin-bottom: 20px;
+      }
+  
+      div#game {
+          display: grid;
+          grid-template-columns: repeat(3, 100px);
+          grid-template-rows: repeat(3, 100px);
+          gap: 5px;
+      }
+  
+      div#game > div {
+          background: #ffffff;
+          border: 1px solid #cccccc;
+          font-size: 2.5rem;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          cursor: pointer;
+          transition: background-color 0.2s;
+      }
+  
+      div#game > div:hover {
+          background-color: #eeeeee;
+      }
+  
+      div#game > div.X {
+          color: #2c3e50;
+      }
+  
+      div#game > div.O {
+          color: #c0392b;
+      }
+  
+      .score {
+          font-size: 1.2rem;
+          margin-bottom: 10px;
+          color: #333333;
+      }
+  </style>
+  
 </head>
 <body>
-  <script src="main.js"></script>
-  <br>
-  <button onclick="SwitchBtn()">Switch</button>
-  <button onclick="restartGame()">Restart Game</button>
+    <h1>Крестики-нолики</h1>
+    <div id="game">
+        <div class="cell" data-index="0"></div>
+        <div class="cell" data-index="1"></div>
+        <div class="cell" data-index="2"></div>
+        <div class="cell" data-index="3"></div>
+        <div class="cell" data-index="4"></div>
+        <div class="cell" data-index="5"></div>
+        <div class="cell" data-index="6"></div>
+        <div class="cell" data-index="7"></div>
+        <div class="cell" data-index="8"></div>
+    </div>
+    <div id="message"></div>
+    <button id="restart">Рестарт</button>
+
+    <script src="main.js"></script>
 </body>
 </html>
