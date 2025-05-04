@@ -2,6 +2,7 @@ let xWins = 0;
 let oWins = 0;
 let gameOver = false;
 let FirstPlayer = true;
+let gameMode = 1;
 let boardSize = 3;
 let board = [];
 
@@ -53,19 +54,23 @@ function handleClick(event) {
   const row = Number(clickedCell.dataset.row);
   const col = Number(clickedCell.dataset.col);
 
-  if (board[row][col] !== -1 || !FirstPlayer) return;
+  if (board[row][col] !== -1) return;
 
-  board[row][col] = 1;
-  clickedCell.textContent = 'X';
-  FirstPlayer = false;
+  board[row][col] = FirstPlayer ? 1 : 0;
+  clickedCell.textContent = FirstPlayer ? 'X' : 'O';
 
   if (checkWinners() || checkDraw()) {
       gameOver = true;
       return;
   }
 
-  setTimeout(botMove, 300);
+  FirstPlayer = !FirstPlayer;
+
+  if (gameMode === 1 && !FirstPlayer && !gameOver) {
+    setTimeout(botMove, 300);
+  }
 }
+
 
 
 function botMove() {
@@ -147,6 +152,12 @@ function declareWinner(winner) {
 function updateScore() {
     scoreDisplay.textContent = `X: ${xWins} - O: ${oWins}`;
 }
+
+document.getElementById('modeSelect').addEventListener('change', (e) => {
+  gameMode = Number(e.target.value);
+  createBoard(boardSize);
+});
+
 
 document.getElementById('restart').addEventListener('click', () => {
   xWins = 0;
