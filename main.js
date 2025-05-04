@@ -1,5 +1,6 @@
 let xWins = 0;
 let oWins = 0;
+let gameOver = false;
 let FirstPlayer = true;
 let boardSize = 3;
 let board = [];
@@ -41,22 +42,64 @@ function createBoard(size) {
         game.appendChild(cell);
     }
     updateScore();
+    FirstPlayer = true;
+    gameOver = false;
 }
 
 function handleClick(event) {
-    const clickedCell = event.target;
-    const row = Number(clickedCell.dataset.row);
-    const col = Number(clickedCell.dataset.col);
+  if (gameOver) return;
 
-    if (board[row][col] !== -1) return;
+  const clickedCell = event.target;
+  const row = Number(clickedCell.dataset.row);
+  const col = Number(clickedCell.dataset.col);
 
-    board[row][col] = FirstPlayer ? 1 : 0;
-    clickedCell.textContent = FirstPlayer ? 'X' : 'O';
-    FirstPlayer = !FirstPlayer;
+  if (board[row][col] !== -1 || !FirstPlayer) return;
 
-    if (checkWinners()) return;
-    checkDraw();
+  board[row][col] = 1;
+  clickedCell.textContent = 'X';
+  FirstPlayer = false;
+
+  if (checkWinners() || checkDraw()) {
+      gameOver = true;
+      return;
+  }
+
+  setTimeout(botMove, 300);
 }
+
+
+function botMove() {
+  if (gameOver) return;
+
+  let emptyCells = [];
+
+  for (let row = 0; row < boardSize; row++) {
+      for (let col = 0; col < boardSize; col++) {
+          if (board[row][col] === -1) {
+              emptyCells.push({ row, col });
+          }
+      }
+  }
+
+  if (emptyCells.length === 0) return;
+
+  const move = emptyCells[Math.floor(Math.random() * emptyCells.length)];
+  board[move.row][move.col] = 0;
+
+  const index = move.row * boardSize + move.col;
+  const cell = game.children[index];
+  cell.textContent = 'O';
+
+  if (checkWinners() || checkDraw()) {
+      gameOver = true;
+      return;
+  }
+
+  FirstPlayer = true;
+}
+
+
+
 
 function checkWinners() {
     const size = board.length;
@@ -86,10 +129,12 @@ function checkWinners() {
 }
 
 function checkDraw() {
-    if (board.flat().every(cell => cell !== -1)) {
-        setTimeout(() => alert("Draw"), 100);
-        setTimeout(() => createBoard(boardSize), 1000);
-    }
+  if (board.flat().every(cell => cell !== -1)) {
+      setTimeout(() => alert("Draw"), 100);
+      setTimeout(() => createBoard(boardSize), 1000);
+      return true;
+  }
+  return false;
 }
 
 function declareWinner(winner) {
