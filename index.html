@@ -8,7 +8,7 @@
       body {
           margin: 0;
           padding: 0;
-          height: 100vh;
+          height: 600px;
           background-color: #f9f9f9;
           display: flex;
           flex-direction: column;
@@ -26,14 +26,24 @@
           margin-bottom: 10px;
           color: #333333;
       }
+      button {
+        margin-top: 15px;
+        margin-bottom: 15px;
+      }
   </style>
   
 </head>
 <body>
     <h1>Tic tac toe</h1>
     <div id="message"></div>
-    <button id="restart">New Game</button>
 
+    <button id="restart">New Game</button>
+    <label for="boardSize">Choose board size:</label>
+    <select id="boardSize">
+    <option value="3">3x3</option>
+    <option value="4">4x4</option>
+    <option value="5">5x5</option>
+    </select>
     <script src="main.js"></script>
 </body>
 </html>

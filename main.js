@@ -1,149 +1,120 @@
-const game = document.createElement('div');
-game.style.display = 'grid';
-game.style.gridTemplateColumns = 'repeat(3, 100px)';
-game.style.gap = '5px';
-document.body.appendChild(game);
-
 let xWins = 0;
 let oWins = 0;
+let FirstPlayer = true;
+let boardSize = 3;
+let board = [];
+
+const game = document.createElement('div');
+document.body.appendChild(game);
 
 const scoreDisplay = document.createElement('div');
 scoreDisplay.style.marginBottom = '10px';
 scoreDisplay.style.fontSize = '20px';
-scoreDisplay.textContent = `X: ${xWins} - O: ${oWins}`;
 document.body.insertBefore(scoreDisplay, game);
 
-let FirstPlayer = true;
-let board = [
-  [-1, -1, -1],
-  [-1, -1, -1],
-  [-1, -1, -1]
-];
+function createBoard(size) {
+    game.innerHTML = '';
+    game.style.display = 'grid';
+    game.style.gridTemplateColumns = `repeat(${size}, 100px)`;
+    game.style.gap = '5px';
 
+    board = Array.from({ length: size }, () => Array(size).fill(-1));
 
-for (let i = 0; i < 9; i++) {
-  const cell = document.createElement('div');
-  cell.style.width = '100px';
-  cell.style.height = '100px';
-  cell.style.background = '#eee';
-  cell.style.display = 'flex';
-  cell.style.alignItems = 'center';
-  cell.style.justifyContent = 'center';
-  cell.style.fontSize = '40px';
-  cell.style.cursor = 'pointer';
+    for (let i = 0; i < size * size; i++) {
+        const cell = document.createElement('div');
+        cell.style.width = '100px';
+        cell.style.height = '100px';
+        cell.style.background = '#eee';
+        cell.style.display = 'flex';
+        cell.style.alignItems = 'center';
+        cell.style.justifyContent = 'center';
+        cell.style.fontSize = '40px';
+        cell.style.cursor = 'pointer';
 
-  const row = Math.floor(i / 3);
-  const col = i % 3;
+        const row = Math.floor(i / size);
+        const col = i % size;
 
-  cell.dataset.row = row;
-  cell.dataset.col = col;
+        cell.dataset.row = row;
+        cell.dataset.col = col;
+        cell.addEventListener('click', handleClick);
 
-  cell.addEventListener('click', handleClick);
-
-  game.appendChild(cell);
+        game.appendChild(cell);
+    }
+    updateScore();
 }
 
 function handleClick(event) {
-  const clickedCell = event.target;
-  const row = Number(clickedCell.dataset.row);
-  const col = Number(clickedCell.dataset.col);
+    const clickedCell = event.target;
+    const row = Number(clickedCell.dataset.row);
+    const col = Number(clickedCell.dataset.col);
 
-  console.log('Clicked row:', row, 'col:', col);
+    if (board[row][col] !== -1) return;
 
-
-  if (board[row][col] === -1) {
-    if (FirstPlayer) {
-        board[row][col] = 1;
-        clickedCell.textContent = 'X';
-        FirstPlayer = true;
-    } else {
-        board[row][col] = 0;
-        FirstPlayer = false;
-        clickedCell.textContent = 'O';
-    }
+    board[row][col] = FirstPlayer ? 1 : 0;
+    clickedCell.textContent = FirstPlayer ? 'X' : 'O';
     FirstPlayer = !FirstPlayer;
-    
-  }
-  if (checkWinners()) {
-    return;
-  }
 
-  checkDraw();
+    if (checkWinners()) return;
+    checkDraw();
 }
 
 function checkWinners() {
-    for (let row = 0; row < 3; row++) {
-        if (board[row][0] === board[row][1] && board[row][1] === board[row][2] && board[row][0] !== -1) {
-            declareWinner(board[row][1]);
-            return;
+    const size = board.length;
+
+    for (let i = 0; i < size; i++) {
+        if (board[i].every(cell => cell === board[i][0] && cell !== -1)) {
+            declareWinner(board[i][0]);
+            return true;
         }
-      }
-    
-      for (let col = 0; col < 3; col++) {
-        if (board[0][col] === board[1][col] && board[1][col] === board[2][col] && board[0][col] !== -1) {
-            declareWinner(board[1][col]);
-            return;
+
+        if (board.every(row => row[i] === board[0][i] && row[i] !== -1)) {
+            declareWinner(board[0][i]);
+            return true;
         }
-      }
-    
-      if ((board[0][0] === board[1][1] && board[1][1] === board[2][2] && board[1][1] !== -1) ||
-       (board[0][2] === board[1][1] && board[1][1] === board[2][0] && board[1][1] !== -1)) {
-            declareWinner(board[1][1]);
-            return;
-      }
-      return false;
+    }
+
+    if (board.every((row, idx) => row[idx] === board[0][0] && row[idx] !== -1)) {
+        declareWinner(board[0][0]);
+        return true;
+    }
+    if (board.every((row, idx) => row[size - 1 - idx] === board[0][size - 1] && row[size - 1 - idx] !== -1)) {
+        declareWinner(board[0][size - 1]);
+        return true;
+    }
+
+    return false;
 }
 
 function checkDraw() {
-    let filledCells = 0;
-    for (let row = 0; row < 3; row++) {
-      for (let col = 0; col < 3; col++) {
-        if (board[row][col] !== -1) {
-          filledCells++;
-        }
-      }
-    }
-    if (filledCells === 9) {
+    if (board.flat().every(cell => cell !== -1)) {
         setTimeout(() => alert("Draw"), 100);
-      setTimeout(() => restartGame(), 1000);
+        setTimeout(() => createBoard(boardSize), 1000);
     }
-  }
+}
 
-  function declareWinner(winner) {
-    if (winner === 1) {
-        xWins++;
-        setTimeout(() => alert("X wins!"), 100);
-    } else {
-        oWins++;
-        setTimeout(() => alert("O wins!"), 100);
-    }
+function declareWinner(winner) {
+    winner === 1 ? xWins++ : oWins++;
+    setTimeout(() => alert(winner === 1 ? "X wins!" : "O wins!"), 100);
     updateScore();
-    setTimeout(() => restartGame(), 1000);
-  }
-
-function SwitchBtn() {
-    FirstPlayer = !FirstPlayer;
+    setTimeout(() => createBoard(boardSize), 1000);
 }
 
 function updateScore() {
     scoreDisplay.textContent = `X: ${xWins} - O: ${oWins}`;
-  }
+}
 
-function restartGame() {
-    board = [
-      [-1, -1, -1],
-      [-1, -1, -1],
-      [-1, -1, -1]
-    ];
-  
-    const cells = document.querySelectorAll('div');
-  cells.forEach(cell => {
-    if (cell !== game && cell !== scoreDisplay) { 
-        cell.textContent = '';
-      }
-  });
-  
- 
-    FirstPlayer = true;
-  }
+document.getElementById('restart').addEventListener('click', () => {
+  xWins = 0;
+  oWins = 0;
+  updateScore();
+  createBoard(boardSize);
+});
+
+document.getElementById('boardSize').addEventListener('change', (e) => {
+  boardSize = Number(e.target.value);
+  createBoard(boardSize);
+});
+
+createBoard(boardSize);
+
   
