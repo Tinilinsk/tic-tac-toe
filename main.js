@@ -15,36 +15,40 @@ scoreDisplay.style.fontSize = '20px';
 document.body.insertBefore(scoreDisplay, game);
 
 function createBoard(size) {
-    game.innerHTML = '';
-    game.style.display = 'grid';
-    game.style.gridTemplateColumns = `repeat(${size}, 100px)`;
-    game.style.gap = '5px';
+  game.innerHTML = '';
+  game.style.display = 'grid';
+  game.style.gridTemplateColumns = `repeat(${size}, 100px)`;
+  game.style.gap = '5px';
 
-    board = Array.from({ length: size }, () => Array(size).fill(-1));
+  board = [];
 
-    for (let i = 0; i < size * size; i++) {
-        const cell = document.createElement('div');
-        cell.style.width = '100px';
-        cell.style.height = '100px';
-        cell.style.background = '#eee';
-        cell.style.display = 'flex';
-        cell.style.alignItems = 'center';
-        cell.style.justifyContent = 'center';
-        cell.style.fontSize = '40px';
-        cell.style.cursor = 'pointer';
+  for (let row = 0; row < size; row++) {
+      const rowArr = [];
+      for (let col = 0; col < size; col++) {
+          rowArr.push(-1);
 
-        const row = Math.floor(i / size);
-        const col = i % size;
+          const cell = document.createElement('div');
+          cell.style.width = '100px';
+          cell.style.height = '100px';
+          cell.style.background = '#eee';
+          cell.style.display = 'flex';
+          cell.style.alignItems = 'center';
+          cell.style.justifyContent = 'center';
+          cell.style.fontSize = '40px';
+          cell.style.cursor = 'pointer';
 
-        cell.dataset.row = row;
-        cell.dataset.col = col;
-        cell.addEventListener('click', handleClick);
+          cell.dataset.row = row;
+          cell.dataset.col = col;
+          cell.addEventListener('click', handleClick);
 
-        game.appendChild(cell);
-    }
-    updateScore();
-    FirstPlayer = true;
-    gameOver = false;
+          game.appendChild(cell);
+      }
+      board.push(rowArr);
+  }
+
+  updateScore();
+  FirstPlayer = true;
+  gameOver = false;
 }
 
 function handleClick(event) {
@@ -107,30 +111,30 @@ function botMove() {
 
 
 function checkWinners() {
-    const size = board.length;
+  const size = board.length;
 
-    for (let i = 0; i < size; i++) {
-        if (board[i].every(cell => cell === board[i][0] && cell !== -1)) {
-            declareWinner(board[i][0]);
-            return true;
-        }
+  for (let i = 0; i < size; i++) {
+      if (board[i].every(function(cell) { return cell === board[i][0] && cell !== -1; })) {
+          declareWinner(board[i][0]);
+          return true;
+      }
 
-        if (board.every(row => row[i] === board[0][i] && row[i] !== -1)) {
-            declareWinner(board[0][i]);
-            return true;
-        }
-    }
+      if (board.every(function(row) { return row[i] === board[0][i] && row[i] !== -1; })) {
+          declareWinner(board[0][i]);
+          return true;
+      }
+  }
 
-    if (board.every((row, idx) => row[idx] === board[0][0] && row[idx] !== -1)) {
-        declareWinner(board[0][0]);
-        return true;
-    }
-    if (board.every((row, idx) => row[size - 1 - idx] === board[0][size - 1] && row[size - 1 - idx] !== -1)) {
-        declareWinner(board[0][size - 1]);
-        return true;
-    }
+  if (board.every(function(row, idx) { return row[idx] === board[0][0] && row[idx] !== -1; })) {
+      declareWinner(board[0][0]);
+      return true;
+  }
+  if (board.every(function(row, idx) { return row[size - 1 - idx] === board[0][size - 1] && row[size - 1 - idx] !== -1; })) {
+      declareWinner(board[0][size - 1]);
+      return true;
+  }
 
-    return false;
+  return false;
 }
 
 function checkDraw() {
